@@ -19,6 +19,8 @@ canku 是一个使用 nodejs 编写的多人订餐程序，使用了 [express](h
 
     git clone git@github.com:willerce/noderce.git
 
+你需要在本机启动好 MongoDB 服务，如果需要测试数据，请看[这里](https://github.com/willerce/canku/issues/17)
+
 复制一份global.default.js，保存为 复制一份global.js，根据注释，修改参数。
 
 运行 npm install 安装依赖包
@@ -27,6 +29,7 @@ canku 是一个使用 nodejs 编写的多人订餐程序，使用了 [express](h
 
 店铺管理管理地址： http://yourname.com/admin
 
+如果注册时提示`注册失败，请重试`请检查mongodb是否在运行（例如：可通过命令`mongo localhost/canku`连接数据库）
 
 ## 添加店铺
 
@@ -39,7 +42,7 @@ canku 是一个使用 nodejs 编写的多人订餐程序，使用了 [express](h
     .food-list li {width: 269px;}
     .food-list li:nth-child(even) {margin-right: 0; float:right;}
 
-
+3. 支持以图片的方式上传每家店铺的菜单，用户可以直接在图上戳戳以点餐，图片菜单中的菜不能算入价格。
 
 ##License
 
