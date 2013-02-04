@@ -26,8 +26,9 @@
         </tr>
         </thead>
         <tbody>
-        <% orders.orders.forEach(function(order){%>
-        <tr data-id="<%=order._id%>">
+        <% orders.orders.forEach(function(order){ %>
+          <% if (order.user_name == locals.session.user.name) { %>
+        <tr data-id="<%=order._id%>" class="owner">
           <td class="name user-<%=order.user_id%>"><%=order.user_name%></td>
           <td class="food">
             <ul>
@@ -42,13 +43,43 @@
           <td class="total">
             ￥<%=order.total%>
           </td>
+          <td class="cancel-order">
+            <a href="/user/order/delete/<%= order._id %>" class="buy-btn">取消订单</a>
+          </td>
         </tr>
+          <% } else { %>
+        <tr data-id="<%=order._id%>">
+          <td class="name user-<%=order.user_id%>"><%=order.user_name%></td>
+          <td class="food">
+            <ul>
+              <% order.order.forEach(function(food){ %>
+              <li><%=food.name%> - <%=food.price%>元 - <%=food.num%> 份</li>
+              <%})%>
+              <%if(order.picmenu){%>
+              <% order.picmenu.forEach(function(food){ %>
+              <li>
+                <div style="position:relative;overflow:hidden;width:<%=food.itemwidth%>px;height:<%=food.itemheight%>px;">
+                  <img src="<%=food.picmenu%>" style="position:absolute;left:<%=food.left%>px;top:<%=food.top%>px;width:<%=food.width%>px;height:<%=food.height%>px;" />
+                </div>
+              </li>
+              <%})%>
+              <%}%>
+            </ul>
+          </td>
+          <td class="luck" data-luck="<%=order.luck%>">
+            <div class="bar" style="width:<%=order.luck*0.9%>px"><%=order.luck%></div>
+          </td>
+          <td class="total">
+            ￥<%=order.total%>
+          </td>
+        </tr>
+          <% } %>
         <%})%>
         </tbody>
         <tfoot>
         <tr style="text-align: right;background: #f9f9f9;">
           <td colspan="4">
-            共计：<b><%=orders.totalPrice%></b> 元
+            共计：<b><%=orders.totalPrice%></b> 元（价格不包括图片中的）
           </td>
         </tr>
         </tfoot>
@@ -65,11 +96,22 @@
           <td><%=orders.analytics[key].name%> - <%=orders.analytics[key].num%>份</td>
         </tr>
         <%}%>
+        <% orders.orders.forEach(function(order){
+         if(order.picmenu){
+         order.picmenu.forEach(function(food){ %>
+        <tr>
+          <td>
+            <div style="position:relative;overflow:hidden;width:<%=food.itemwidth%>px;height:<%=food.itemheight%>px;">
+              <img src="<%=food.picmenu%>" style="position:absolute;left:<%=food.left%>px;top:<%=food.top%>px;width:<%=food.width%>px;height:<%=food.height%>px;" />
+            </div>
+          </td>
+        </tr>
+        <%})}})%>
         </tbody>
         <tfoot>
         <tr style="text-align: right;background: #f9f9f9;">
           <td colspan="3">
-            <p>共计 <b><%=orders.totalNum%></b> 份， <b><%=orders.totalPrice%></b> 元</p>
+            <p>共计 <b><%=orders.totalNum%></b> 份， <b><%=orders.totalPrice%></b> 元（价格不包括图片中的）</p>
           </td>
         </tr>
         </tfoot>
@@ -87,4 +129,13 @@
   </div>
   <%}%>
 </div>
+<script>
+(function(){
+  $(".owner").hover(function(){
+    $(".cancel-order").css({"display": "block"});
+  },function(){
+    $(".cancel-order").css({"display": "none"});
+  })
+})()
+</script>
 <% include footer %>
